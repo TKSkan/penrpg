@@ -12,7 +12,8 @@ var ASSETS = {
         bg: './img/ikamaker.png'
     },
     sound:{
-        bgm1: './bgm/bgm_maoudamashii_8bit28.mp3'
+        bgm1: './bgm/bgm_maoudamashii_8bit28.mp3',
+        se1: './bgm/se_maoudamashii_battle_gun02.mp3'
     }
 };
 
@@ -27,44 +28,54 @@ phina.define('MainScene', {
 
         this.background = Sprite('bg').addChildTo(this);
         this.background.origin.set(0,0);
+        this.tmpcount = 0;
 
-        this.player = Sprite('chara', 32, 32).addChildTo(this).setPosition(30, 30);
-        this.player.frameIndex = 0;
-        this.spd = SPEED;
-        this.vx = 0;
-        this.vy = 0;
+        // 自作クラスのロード
+        Player('chara', 80, 180).addChildTo(this);
+        Player('chara', 180, 80).addChildTo(this);
+        Player('chara', 280, 280).addChildTo(this);
+
 
     },
 
     update: function(app) {
-        this.vx = 0;
-        this.vy = 0;
 
         var key = app.keyboard;
-        if(key.getKey('left')) {
-            this.vx = -this.spd;
-        }
-        if(key.getKey('right')) {
-            this.vx = this.spd;
-        }
-        if(key.getKey('up')) {
-            this.vy = -this.spd;
-        }
-        if(key.getKey('down')) {
-            this.vy = this.spd;
-        }
-
-        this.player.x += this.vx;
-        this.player.y += this.vy;
-
         if(key.getKey('s')) {
             SoundManager.playMusic('bgm1');
         }
         if(key.getKey('e')) {
             SoundManager.stopMusic();
         }
+        if(key.getKey('a') && this.tmpcount === 0) {
+            SoundManager.play('se1');
+            this.tmpcount = 10;
+        } else if(this.tmpcount !== 0){
+            this.tmpcount--;
+        }
     }
 });
+
+// 自作クラス
+phina.define('Player', {
+    superClass:'Sprite',
+    init: function(sp, x, y) {
+        this.superInit(sp, 32, 32);
+        this.setPosition(x, y);
+        this.frameIndex = 0;
+        this.speed = 4;
+        this.vx = this.speed;
+        this.vy = this.speed;
+    },
+
+    update: function(app){
+        this.x += this.vx;
+        this.y += this.vy;
+        if(this.x < 0 || this.x > SCREEN_WIDTH) { this.vx = -this.vx; }
+        if(this.y < 0 || this.y > SCREEN_HEIGHT) { this.vy = -this.vy; }
+    }
+})
+
 
 phina.main(function() {
     var app = GameApp({
