@@ -22,19 +22,27 @@ phina.define('MainScene', {
         this.background = Sprite('bg').addChildTo(this);
         this.background.origin.set(0,0);
 
-        this.player = Sprite('chara', 32, 32).addChildTo(this).setPosition(30, 30);
-        this.player.frameIndex = 0;
-        this.speed = 4;
-        this.vx = this.speed;
-        this.vy = this.speed;
+        this.player_pos = []; // 空配列の準備
+
 
     },
 
     update: function(app) {
-        this.player.x += this.vx;
-        this.player.y += this.vy;
-        if(this.player.x < 0 || this.player.x > SCREEN_WIDTH) { this.vx = -this.vx; }
-        if(this.player.y < 0 || this.player.y > SCREEN_HEIGHT) { this.vy = -this.vy; }
+        var p = app.pointer;
+        // 押しっぱなし可能
+        /*
+        if(p.getPointing()){
+            this.player = Sprite('chara', 32, 32).addChildTo(this).setPosition(p.x, p.y);
+            this.player.frameIndex = 0;
+            this.player_pos.push(this.player);
+        }
+        */
+        // クリックして離した瞬間にキャラPUT
+        this.onpointend = function() {
+            this.player = Sprite('chara', 32, 32).addChildTo(this).setPosition(p.x, p.y);
+            this.player.frameIndex = 0;
+            this.player_pos.push(this.player);
+        }
     }
 });
 
