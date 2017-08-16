@@ -13,8 +13,7 @@ var ASSETS = {
     },
     sound:{
         bgm1: './bgm/bgm_maoudamashii_8bit28.mp3',
-        se1: './bgm/se_maoudamashii_battle_gun02.mp3',
-        se2: './bgm/se_maoudamashii_se_sound15.mp3'
+        se1: './bgm/se_maoudamashii_battle_gun02.mp3'
     }
 };
 
@@ -31,21 +30,15 @@ phina.define('MainScene', {
         this.background.origin.set(0,0);
         this.tmpcount = 0;
 
-        this.group = DisplayElement().addChildTo(this);
-        for(var i=0; i<5; i++) {
-            Player('chara', 80 * i, 180).addChildTo(this.group);
-        }
-
         // 自作クラスのロード
-        // Player('chara', 80, 180).addChildTo(this);
+        Player('chara', 80, 180).addChildTo(this);
+        Player('chara', 180, 80).addChildTo(this);
+        Player('chara', 280, 280).addChildTo(this);
 
 
     },
 
     update: function(app) {
-        if(this.tmpcount !== 0){
-            this.tmpcount--;
-        }
 
         var key = app.keyboard;
         if(key.getKey('s')) {
@@ -54,27 +47,11 @@ phina.define('MainScene', {
         if(key.getKey('e')) {
             SoundManager.stopMusic();
         }
-        // スプライト消去
-        if(key.getKey('d') && this.tmpcount === 0) {
-            var first = this.group.children.first;
-            if(first) {
-                SoundManager.play('se1');
-                this.tmpcount = 10;
-                first.remove();
-            }
-        }
-        // スプライト作成
-        if(key.getKey('c') && this.tmpcount === 0) {
-            Player('chara', 80, 180).addChildTo(this.group);
-            this.tmpcount = 10;
-        }
-        // すべて削除
         if(key.getKey('a') && this.tmpcount === 0) {
-            if(this.group.children.first) {
-                SoundManager.play('se2');
-                this.tmpcount = 10;
-                this.group.children.clear();
-            }
+            SoundManager.play('se1');
+            this.tmpcount = 10;
+        } else if(this.tmpcount !== 0){
+            this.tmpcount--;
         }
     }
 });
