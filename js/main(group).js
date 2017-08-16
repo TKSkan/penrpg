@@ -8,33 +8,13 @@ var SPEED = 4;
 
 var ASSETS = {
     image:{
-        chara1: './img/pipo-halloweenchara2016_26.png',
-        chara2: './img/pipo-halloweenchara2016_25.png',
-        chara3: './img/pipo-halloweenchara2016_08.png',
+        chara: './img/pipo-halloweenchara2016_26.png',
         bg: './img/ikamaker.png'
     },
     sound:{
         bgm1: './bgm/bgm_maoudamashii_8bit28.mp3',
         se1: './bgm/se_maoudamashii_battle_gun02.mp3',
         se2: './bgm/se_maoudamashii_se_sound15.mp3'
-    },
-    spritesheet: {
-        'chara_ss':
-        {
-            "frame":{
-                "width":32,
-                "height":32,
-                "cols":3, // 行列
-                "rows":4 // 行列
-            },
-            "animations":{
-                "walk":{
-                    "frames":[0,1,2,1], // アニメーションするフレーム指定
-                    "next":"walk", // walkの繰り返し
-                    "frequency":10 // 画像の切り替えスピート
-                }
-            }
-        }
     }
 };
 
@@ -52,9 +32,9 @@ phina.define('MainScene', {
         this.tmpcount = 0;
 
         this.group = DisplayElement().addChildTo(this);
-        Player('chara1', 32, 32, 140, 240).addChildTo(this.group);
-        Player('chara2', 32, 32, 240, 240).addChildTo(this.group);
-        Player('chara3', 32, 32, 340, 240).addChildTo(this.group);
+        for(var i=0; i<5; i++) {
+            Player('chara', 80 * i, 180).addChildTo(this.group);
+        }
 
         // 自作クラスのロード
         // Player('chara', 80, 180).addChildTo(this);
@@ -85,7 +65,7 @@ phina.define('MainScene', {
         }
         // スプライト作成
         if(key.getKey('c') && this.tmpcount === 0) {
-            Player('chara1', 32, 32, 80, 180).addChildTo(this.group);
+            Player('chara', 80, 180).addChildTo(this.group);
             this.tmpcount = 10;
         }
         // すべて削除
@@ -102,27 +82,20 @@ phina.define('MainScene', {
 // 自作クラス
 phina.define('Player', {
     superClass:'Sprite',
-    init: function(sp, xSize, ySize, x, y) {
-        this.superInit(sp, xSize, ySize);
+    init: function(sp, x, y) {
+        this.superInit(sp, 32, 32);
         this.setPosition(x, y);
         this.frameIndex = 0;
         this.speed = 4;
         this.vx = this.speed;
         this.vy = this.speed;
-        this.scaleX = 1.5;
-        this.scaleY = 1.5;
-
-        // animation
-        var spritesheet = FrameAnimation('chara_ss');
-        spritesheet.attachTo(this);
-        spritesheet.gotoAndPlay('walk');
     },
 
     update: function(app){
-    //     this.x += this.vx;
-    //     this.y += this.vy;
-    //     if(this.x < 0 || this.x > SCREEN_WIDTH) { this.vx = -this.vx; }
-    //     if(this.y < 0 || this.y > SCREEN_HEIGHT) { this.vy = -this.vy; }
+        this.x += this.vx;
+        this.y += this.vy;
+        if(this.x < 0 || this.x > SCREEN_WIDTH) { this.vx = -this.vx; }
+        if(this.y < 0 || this.y > SCREEN_HEIGHT) { this.vy = -this.vy; }
     }
 })
 
