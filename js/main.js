@@ -29,8 +29,16 @@ phina.define('MainScene', {
 
     update: function(app) {
         var p = app.pointer;
-
+        // 押しっぱなし可能
+        /*
         if(p.getPointing()){
+            this.player = Sprite('chara', 32, 32).addChildTo(this).setPosition(p.x, p.y);
+            this.player.frameIndex = 0;
+            this.player_pos.push(this.player);
+        }
+        */
+        // クリックして離した瞬間にキャラPUT
+        this.onpointend = function() {
             this.player = Sprite('chara', 32, 32).addChildTo(this).setPosition(p.x, p.y);
             this.player.frameIndex = 0;
             this.player_pos.push(this.player);
