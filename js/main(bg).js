@@ -3,11 +3,8 @@ phina.globalize();
 var SCREEN_WIDTH = 640;
 var SCREEN_HEIGHT = 480;
 
-// ひぽや素材
-
 var ASSETS = {
     image:{
-        chara: './img/pipo-halloweenchara2016_26.png',
         bg: './img/ikamaker.png'
     },
 };
@@ -22,19 +19,6 @@ phina.define('MainScene', {
         this.background = Sprite('bg').addChildTo(this);
         this.background.origin.set(0,0);
 
-        this.player_pos = []; // 空配列の準備
-
-
-    },
-
-    update: function(app) {
-        var p = app.pointer;
-
-        if(p.getPointing()){
-            this.player = Sprite('chara', 32, 32).addChildTo(this).setPosition(p.x, p.y);
-            this.player.frameIndex = 0;
-            this.player_pos.push(this.player);
-        }
     }
 });
 
