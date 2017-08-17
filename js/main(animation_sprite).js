@@ -47,11 +47,6 @@ phina.define('MainScene', {
     init: function() {
         this.superInit();
 
-        this.backgroundColor = 'black';
-        this.group = DisplayElement().addChildTo(this);
-        this.start = [SCREEN_WIDTH/2, SCREEN_HEIGHT/2];
-
-/*
         this.background = Sprite('bg').addChildTo(this);
         this.background.origin.set(0,0);
         this.tmpcount = 0;
@@ -60,7 +55,6 @@ phina.define('MainScene', {
         Player('chara1', 32, 32, 140, 240).addChildTo(this.group);
         Player('chara2', 32, 32, 240, 240).addChildTo(this.group);
         Player('chara3', 32, 32, 340, 240).addChildTo(this.group);
-*/
 
         // 自作クラスのロード
         // Player('chara', 80, 180).addChildTo(this);
@@ -69,13 +63,6 @@ phina.define('MainScene', {
     },
 
     update: function(app) {
-
-        var p = app.pointer;
-
-        if(p.getPointing()){
-            // サークルを作る
-            Circle(this.start,[p.x, p.y]).addChildTo(this.group);
-        }
         if(this.tmpcount !== 0){
             this.tmpcount--;
         }
@@ -109,46 +96,10 @@ phina.define('MainScene', {
                 this.group.children.clear();
             }
         }
-
-        this.group.children.eraseIf(function(elem) {
-            if(elem.derete === true) {
-                return true;
-            }
-        })
     }
 });
 
-// 自作クラス(circle)
-phina.define('Circle', {
-    superClass:'CircleShape',
-    init: function(start, target) {
-        this.superInit(start,target);
-
-        this.setPosition(start[0],start[1]);
-        this.fill = '#ff8800';
-        this.stroke = '#ff0000';
-        this.stroleWidth = 5;
-        this.radius = 5;
-        this.speed = 8;
-        this.direction = Math.atan2(target[1]-start[1], target[0]-start[0]);
-        this.vx = Math.cos(this.direction)*this.speed;
-        this.vy = Math.sin(this.direction)*this.speed;
-        this.delete = false;
-    },
-    update: function(app) {
-        this.x += this.vx;
-        this.y += this.vy;
-
-        if (this.x < 0 || this.x > SCREEN_WIDTH || this.y < 0 || this.y > SCREEN_HEIGHT) {
-            this.derete = true;
-        }
-        console.log('a');
-    }
-})
-
-
-
-// 自作クラス(player)
+// 自作クラス
 phina.define('Player', {
     superClass:'Sprite',
     init: function(sp, xSize, ySize, x, y) {
