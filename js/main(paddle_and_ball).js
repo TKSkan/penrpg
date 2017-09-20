@@ -31,14 +31,8 @@ phina.define('MainScene', {
         this.backgroundColor = 'black';
         this.paddleGroup = DisplayElement().addChildTo(this);
         this.ballGroup = DisplayElement().addChildTo(this);
-        this.brickGroup = DisplayElement().addChildTo(this);
         var paddle = Paddle().addChildTo(this.paddleGroup);
         Ball(paddle).addChildTo(this.ballGroup);
-        for (var x=1; x<11; x++) {
-            for (var y=1; y<6; y++) {
-                Brick(x, y).addChildTo(this.brickGroup);
-            }
-        }
     },
 
     update: function(app) {
@@ -111,33 +105,8 @@ phina.define('Ball', {
             this.y = 0 + this.radius;
             this.dy = -this.dy;
         }
-        // パドルの反射判定
-        if (this.hitTestElement(this.paddle) && this.dy > 0) {
-            this.bottom = this.paddle.top;
-            this.dy = -this.dy;
-        }
-        // ボールを落とした場合の処理
-        if (this.y - this.radius > SCREEN_HEIGHT) {
-            this.update = this.start;
-        }
     }
 })
-
-// ブロッククラス
-phina.define('Brick', {
-    superClass:'RectangleShape',
-    init:function(x,y){
-        this.superInit(x,y);
-        this.width = 50;
-        this.height = 30;
-        this.stroke = 'black';
-        this.fill = 'brown';
-        this.setPosition(x*(this.width+5), y*(this.height+2));
-    }
-})
-
-
-
 
 phina.main(function() {
     var app = GameApp({
